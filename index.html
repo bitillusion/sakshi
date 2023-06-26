@@ -89,10 +89,52 @@
 </div>
 <div class="container">
     <div class="content">
-        <span style="font-size: 24px; color: #333;">I am sorry <span class="emoji">🥲</span></span>
+        <span style="font-size: 24px; color: #333;" id="update">I am sorry <span class="emoji">🥲</span></span>
     </div>
 </div>
 </body>
+
+	
+<script>
+    const url = 'https://cors-proxy.rsharma-7k.workers.dev/corsproxy/';
+    let feed = []
+
+    fetch(url)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Network response was not ok');
+            }
+        })
+        .then(data => {
+            data.results.forEach(element => {
+                if (element.properties.Status.select.name == "Live"){
+                    feed.push(element.properties.Name.title[0].text.content)
+                }
+                console.log(element)
+            });
+            console.log(feed)
+            const toUpdate = document.getElementById('update');
+            let currentIndex = 0;
+
+            toUpdate.addEventListener("click", function() {
+                // Update the div's content
+                toUpdate.innerHTML = feed[currentIndex];
+
+                // Increment the index and loop back to the start if necessary
+                currentIndex = (currentIndex + 1) % feed.length;
+                console.log(currentIndex)
+            });
+
+
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+
+</script>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-EKTGNKPR6J"></script>
 <script>
